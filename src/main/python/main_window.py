@@ -3,6 +3,7 @@
 from PyQt5.QtCore import Qt, QSettings, QStandardPaths
 from PyQt5.QtWidgets import QWidget, QComboBox, QToolButton, QHBoxLayout, QVBoxLayout, QMainWindow, QAction, qApp, \
     QFileDialog, QDialog, QTabWidget, QActionGroup, QMessageBox, QLabel
+from PyQt5.QtGui import QMovie
 
 import json
 import os
@@ -59,6 +60,12 @@ class MainWindow(QMainWindow):
         self.tabs = QTabWidget()
         self.refresh_tabs()
 
+        self.gif = QMovie('src/main/icons/Vial.gif')
+        self.lbl_gif = QLabel("MainWindow")
+        self.lbl_gif.setMovie(self.gif)
+        self.lbl_gif.setAlignment(Qt.AlignCenter)
+        self.gif.start()
+
         self.lbl_no_devices = QLabel(tr("MainWindow", 'No devices detected. Connect a Vial-compatible device and press '
                                                       '"Refresh"\n'
                                                       'or select "File" → "Download VIA definitions" in order to enable'
@@ -68,8 +75,9 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout()
         layout.addLayout(layout_combobox)
         layout.addWidget(self.tabs)
+        layout.addWidget(self.lbl_gif)
         layout.addWidget(self.lbl_no_devices)
-        layout.setAlignment(self.lbl_no_devices, Qt.AlignHCenter)
+        #layout.setAlignment(self.lbl_no_devices, Qt.AlignHCenter)
         w = QWidget()
         w.setLayout(layout)
         self.setCentralWidget(w)
@@ -195,9 +203,11 @@ class MainWindow(QMainWindow):
 
         if self.devices:
             self.lbl_no_devices.hide()
+            self.lbl_gif.hide()
             self.tabs.show()
         else:
             self.lbl_no_devices.show()
+            self.lbl_gif.show()
             self.tabs.hide()
 
     def on_device_selected(self):
