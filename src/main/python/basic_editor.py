@@ -13,3 +13,12 @@ class BasicEditor(QVBoxLayout):
 
     def rebuild(self, device):
         self.device = device
+
+    def on_container_clicked(self):
+        pass
+
+    def activate(self):
+        pass
+
+    def deactivate(self):
+        pass

@@ -59,6 +59,11 @@ class KeymapEditor(BasicEditor):
 
         self.device = None
 
+    def on_container_clicked(self):
+        """ Called when a mouse click event is bubbled up to the editor's container """
+        self.container.deselect()
+        self.container.update()
+
     def on_keycode_changed(self, code):
         self.set_key(code)
 
@@ -72,6 +77,7 @@ class KeymapEditor(BasicEditor):
         # create new layer labels
         for x in range(self.keyboard.layers):
             btn = SquareButton(str(x))
+            btn.setFocusPolicy(Qt.NoFocus)
             btn.setRelSize(1.667)
             btn.setCheckable(True)
             btn.clicked.connect(lambda state, idx=x: self.switch_layer(idx))
@@ -94,6 +100,7 @@ class KeymapEditor(BasicEditor):
             recreate_keyboard_keycodes(self.keyboard)
             self.tabbed_keycodes.recreate_keycode_buttons()
             self.refresh_layer_display()
+        self.container.setEnabled(self.valid())
 
     def valid(self):
         return isinstance(self.device, VialKeyboard)

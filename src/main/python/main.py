@@ -1,4 +1,11 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
+import ssl
+import certifi
+import os
+
+if ssl.get_default_verify_paths().cafile is None:
+    os.environ['SSL_CERT_FILE'] = certifi.where()
+
 import traceback
 
 from PyQt5 import QtWidgets, QtCore
@@ -12,6 +19,9 @@ from constants import WINDOW_WIDTH, WINDOW_HEIGHT
 
 
 # http://timlehr.com/python-exception-hooks-with-qt-message-box/
+from util import init_logger
+
+
 def show_exception_box(log_msg):
     if QtWidgets.QApplication.instance() is not None:
         errorbox = QtWidgets.QMessageBox()
@@ -52,6 +62,7 @@ if __name__ == '__main__':
         linux_keystroke_recorder()
     else:
         appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
+        init_logger()
         qt_exception_hook = UncaughtHook()
         window = MainWindow()
         window.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
